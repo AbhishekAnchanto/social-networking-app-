@@ -1,7 +1,63 @@
-<h1>Showing post details</h1>
-
-<p><strong>Title: </strong><%= @post.title %></p>
-<p><strong>Description: </strong><%= @post.description %></p> 
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Delete', post_path(@post), method: :delete, data: { confirm: "Are you sure?" } %> |
-<%= link_to 'Return to posts listing', posts_path %> 
+<div id="page-content">
+  <h2 class="text-center mt-4"><%= @post.title %></h2>
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col-8 mt-4">
+          <div class="card text-center shadow mb-5 bg-white rounded">
+            <div class="card-header font-italic">
+              by <%= @post.user.email if @post.user %>
+            </div>
+            <div class="card-body">
+              <div class="card-text text-left"><%= simple_format(@post.description) %></div>
+            </div>
+            <div class="card-footer text-muted">
+            <small>Created <%= time_ago_in_words(@post.created_at) %> ago, 
+              edited <%= time_ago_in_words(@post.updated_at) %> ago</small>
+            </div>
+          </div>
+          <% if user_signed_in?  %>
+            <%= form_with scope: :comment, url: comments_path, local: true do |f|%>
+              <div class="form-group row justify-content-center">
+                <div class="col-10">
+                  <%= f.text_area :data,rows:3, class:"form-control shadow-sm bg-white rounded",placeholder:"Comment on Post" %>
+                </div>
+                <div class="form-group row">
+                  <div class="col-10">
+                    <%= f.number_field :post_id, id: :comment_post_id, class:"form-control", value: @post.id,type: :hidden %>
+                  </div>   
+                </div>
+                <div class="form-group row">
+                  <div class="col-10">
+                  <%= f.number_field :user_id, id: :comment_user_id, class:"form-control", value: current_user.id,type: :hidden%>
+                  </div>   
+                </div>
+              </div>
+              <div class="form-group row justify-content-center">
+                <%= f.submit "Add Comment", class:"btn btn-primary btn-lg" %>
+              </div>
+            <% end %>
+          <% end %>
+          <br/>
+          <h3><b>Comments:-</b></h3>
+          <% if @comments.count==0 %>
+            <p class="text-center">No Comments Yet</p>
+            <% else %> 
+              <% @comments.each do |comment| %>
+                <div class="card mt-4">
+                  <div class="card-header">
+                    by <%= comment.user.email.split("@")[0].capitalize %>
+                  </div>
+                  <div class="card-body">
+                    <%= comment.data %>
+                  </div>
+                    <div class="card-footer text-muted">
+                      <small>Created <%= time_ago_in_words(@post.created_at) %> ago, 
+                      edited <%= time_ago_in_words(@post.updated_at) %> ago</small>
+                    </div>
+                </div>
+              <% end %>  
+          <% end %>  
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div id="page-content">
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-10">
+        <%= render 'shared/errors',obj: @user  %>
+        <%= form_with(model: @user, class: "shadow p-3 mb-3 bg-info rounded", local: true) do |f| %>
+          <div class="form-group row">
+            <%= f.label :email, class: "col-2 col-form-label text-light" %>
+              <div class="col-10">
+                <%= f.text_field :email, class: "form-control shadow rounded", placeholder: "Enter Email" %>
+              </div>
+          </div>
+            <div class="form-group row">
+              <%= f.label :password, class: "col-2 col-form-label text-light" %>
+              <div class="col-10">
+                <%= f.password_field :description, rows:10, class: "form-control shadow rounded", placeholder: "Enter password" %>
+              </div>
+            </div>
+              <div class="form-group row justify-content-center">
+                <%= f.submit "Update Account", class: "btn btn-outline-light btn-lg" %>
+              </div>
+        <% end %>
+      </div>
+        <div class="mb-3">
+          <%= link_to '[ Cancel and return to article listing ]', posts_path %>
+        </div>    
+    </div>
+  </div>
+</div>
